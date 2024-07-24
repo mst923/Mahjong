@@ -172,3 +172,96 @@ body {
     background-repeat: no-repeat;
     z-index: -1;
   } */
+
+
+  .modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .modal select, .modal button {
+    font-size: 24px;
+    margin: 10px;
+  }
+
+  .modal .close-button {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .count-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .counter {
+    margin: 0 10px;
+  }
+  
+  button.increment, button.decrement {
+    font-size: 24px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  button.increment:hover, button.decrement:hover {
+    background-color: #45a049;
+  }
+  
+  button.increment:disabled, button.decrement:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+
+  .button-container {
+    margin-top: 20px;
+  }
+  
+  .button-container button {
+    font-size: 24px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .button-container button:hover {
+    background-color: #45a049;
+  }
+  
+  .modal select, .modal button {
+    font-size: 24px;
+    margin: 10px;
+  }
+  
+  .modal .close-button {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }

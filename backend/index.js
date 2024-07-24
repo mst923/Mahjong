@@ -3,6 +3,12 @@ const bcrypt = require('bcrypt');
 const { User, sequelize } = require('./models');
 
 const app = express();
+// const cors = require('cors');
+const child_tsumo_scores = require('./child_tsumo_scores.json');
+const child_ron_scores = require('./child_ron_scores.json')
+const parent_tsumo_scores = require('./parent_tsumo_scores.json')
+const parent_ron_scores = require('./parent_ron_scores.json')
+
 const port = 3001;
 
 app.use(express.json());
@@ -34,6 +40,24 @@ app.get('/api/users', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get('/api/child_tsumo_scores', (req, res) => {
+  res.json(child_tsumo_scores);
+});
+
+
+app.get('/api/child_ron_scores', (req, res) => {
+  res.json(child_ron_scores)
+})
+
+app.get('/api/parent_tsumo_scores', (req, res) => {
+  res.json(parent_tsumo_scores)
+})
+
+
+app.get('/api/parent_ron_scores', (req, res) => {
+  res.json(parent_ron_scores)
+})
 
 sequelize.sync()
   .then(() => {
