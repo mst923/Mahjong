@@ -1,0 +1,74 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav li {
+  display: inline;
+  margin: 0 10px;
+}
+
+nav a {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* .play4-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.play4-table {
+  display: grid;
+  grid-template-areas:
+    "user1 . user2"
+    ". table ."
+    "user3 . user4";
+  gap: 20px;
+  width: 300px;
+  height: 300px;
+}
+
+.user1 {
+  grid-area: user1;
+}
+
+.user2 {
+  grid-area: user2;
+}
+
+.user3 {
+  grid-area: user3;
+}
+
+.user4 {
+  grid-area: user4;
+}
+
+.table {
+  grid-area: table;
+  background-color: #444;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
