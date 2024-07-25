@@ -3,7 +3,7 @@ import './Play4.css';  // 新しいCSSファイルをインポート
 
 const Play4 = () => {
   const [users, setUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState(new Array(4).fill(''));
+  const [selectedUsers, setSelectedUsers] = useState(new Array(4).fill(''));//ユーザの配列
   const [scores, setScores] = useState(new Array(4).fill(25000)); // 初期点数を設定
   const [kyoutaku, setKyoutaku] = useState(0); // 供託点数
   const [honba, setHonba] = useState(0); // 本場点数
@@ -18,8 +18,6 @@ const Play4 = () => {
   const [childRonPoints, setChildRonPoints] = useState([]); // 子のロンの点数データ
   const [parentTsumoPoints, setParentTsumoPoints] = useState([]); // 親のツモの点数データ
   const [parentRonPoints, setParentRonPoints] = useState([]); // 親のロンの点数データ
-
-  // const [selectedPoint, setSelectedPoint] = useState(0); // 選択された点数
   const [selectedPoint, setSelectedPoint] = useState(null); // 選択された点数
   const [isTenpaiModal, setIsTenpaiModal] = useState(false); // 聴牌モーダルの表示状態
 
@@ -47,12 +45,13 @@ const Play4 = () => {
     .then(data => setParentRonPoints(data.points));
   }, []);
 
+  //ユーザセレクトの時のハンドラ
   const handleSelectChange = (index, event) => {
     const newSelectedUsers = [...selectedUsers];
     newSelectedUsers[index] = event.target.value;
     setSelectedUsers(newSelectedUsers);
   };
-
+  //立直ボタンが押された時のハンドラ
   const handleRiichiClick = (index) => {
     const newScores = [...scores];
     const newRiichiStates = [...riichiStates];
@@ -77,6 +76,7 @@ const Play4 = () => {
     setRiichiStates(newRiichiStates);
   };
 
+  //　流局の扱い
   const handleParentChange = () => {
     const newWinds = [...winds];
     newWinds.unshift(newWinds.pop()); // 風牌を反時計回りに移動
@@ -90,10 +90,12 @@ const Play4 = () => {
     setRiichiStates(newRiichiStates);
   };
 
+  //和了時にモーダルを表示
   const handleAgari = () => {
     setShowModal(true);
   };
 
+  //モーダルの内容を計算する
   const handleModalSubmit = () => {
     const newScores = [...scores];
 
@@ -102,6 +104,7 @@ const Play4 = () => {
       newScores[agariUser] += (ronPoint + 300 * honba);
       newScores[ronUser] -= (ronPoint + 300 * honba);
     } else if (agariType === 'ツモ') {
+      //親のツモ
       if (winds[agariUser] === '東') {
         newScores[agariUser] += (selectedPoint * 3 + 300 * honba);
         for (let i = 0; i < newScores.length; i++) {
@@ -110,6 +113,7 @@ const Play4 = () => {
           }
         }
       } else {
+        //子のツモ
         const [nonEastPoint, eastPoint] = selectedPoint;
         newScores[agariUser] += (nonEastPoint * 2 + eastPoint + 300 * honba);
         for (let i = 0; i < newScores.length; i++) {
@@ -132,16 +136,17 @@ const Play4 = () => {
     setRiichiStates(new Array(4).fill(false));
 
     setScores(newScores);
+    //モーダルを閉じる
     setShowModal(false);
   };
-
+  //点数のセレクタ
   const handlePointSelect = (event) => {
     const selectedOptions = Array.from(event.target.selectedOptions);
     const selectedValues = selectedOptions.map(option => JSON.parse(option.value));
     setSelectedPoint(selectedValues.length > 0 ? selectedValues[0] : [0, 0]);
   };
 
-
+  //モーダルを閉じる&初期化
   const handleCloseModal = () => {
     setIsTenpaiModal(false)
     setShowModal(false);
@@ -151,6 +156,7 @@ const Play4 = () => {
     setSelectedPoint([0, 0]);
   };
 
+  //和了方によって点数セットを変える
   const getPointsOptions = () => {
     if (agariType === 'ロン') {
       return winds[agariUser] === '東' ? parentRonPoints : childRonPoints;
@@ -158,17 +164,17 @@ const Play4 = () => {
       return winds[agariUser] === '東' ? parentTsumoPoints : childTsumoPoints;
     }
   };
-
+  //本場を+1する
   const incrementHonba = () => {
     setHonba(honba + 1);
   };
-
+  //本場を-1する
   const decrementHonba = () => {
     if (honba > 0) {
       setHonba(honba - 1);
     }
   };
-
+  
   const handleTenpai = () => {
     setIsTenpaiModal(true);
     setShowModal(true);
