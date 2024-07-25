@@ -127,6 +127,14 @@ const Play4 = () => {
         }
       }
     }
+    //和了が親でなければ、親を回す、本場を0にする
+    if(winds[agariUser] !== '東'){
+      handleParentChange()
+      setHonba(0)
+    }else{
+      //和了が親であれば
+      incrementHonba()
+    }
 
     // 供託点数の受け取り
     newScores[agariUser] += kyoutaku;
@@ -216,10 +224,17 @@ const Play4 = () => {
       newRiichiStates[i] = false;
     }
 
+    const parentIndex = winds.indexOf('東')
+    // 東が聴牌でない場合、親流れを呼び出す
+    if (!tenpaiStates[parentIndex]) {
+      handleParentChange();
+    }
+
     setScores(newScores);
     setRiichiStates(newRiichiStates);
     setShowModal(false);
     setIsTenpaiModal(false);
+    incrementHonba()
   };
 
   const handleTenpaiChange = (index) => {
@@ -228,9 +243,24 @@ const Play4 = () => {
     setTenpaiStates(newTenpaiStates);
   };
 
+  const handleKyoutakuCollect = (index) => {
+    if (window.confirm('供託点数を回収しますか？')) {
+      const newScores = [...scores];
+      newScores[index] += kyoutaku;
+      setScores(newScores);
+      setKyoutaku(0);
+    }
+  };
+
   return (
     <div className="play4-container">
       <h1>4人麻雀</h1>
+      <div className="button-container">
+      <button onClick={handleParentChange}>親流れ</button>
+      <button onClick={handleAgari}>和了</button>
+      <button onClick={handleTenpai}>聴牌</button>
+      </div>
+      
       <div className="kyoutaku-container">
         供託: {kyoutaku} 点
       </div>
@@ -257,6 +287,13 @@ const Play4 = () => {
               立直
             </button>
             <span>{scores[0]} 点</span>
+            <button
+              className="kyoutaku-button"
+              onClick={() => handleKyoutakuCollect(0)}
+              disabled={kyoutaku === 0}
+            >
+              供託回収
+            </button>
           </div>
         </div>
         <div className="user2">
@@ -276,6 +313,13 @@ const Play4 = () => {
               立直
             </button>
             <span>{scores[1]} 点</span>
+            <button
+              className="kyoutaku-button"
+              onClick={() => handleKyoutakuCollect(1)}
+              disabled={kyoutaku === 0}
+            >
+              供託回収
+            </button>
           </div>
         </div>
         <div className="user3">
@@ -295,6 +339,13 @@ const Play4 = () => {
               立直
             </button>
             <span>{scores[2]} 点</span>
+            <button
+              className="kyoutaku-button"
+              onClick={() => handleKyoutakuCollect(2)}
+              disabled={kyoutaku === 0}
+            >
+              供託回収
+            </button>
             <span className="wind">{winds[2]}</span>
           </div>
         </div>
@@ -315,15 +366,22 @@ const Play4 = () => {
               立直
             </button>
             <span>{scores[3]} 点</span>
+            <button
+              className="kyoutaku-button"
+              onClick={() => handleKyoutakuCollect(3)}
+              disabled={kyoutaku === 0}
+            >
+              供託回収
+            </button>
           </div>
         </div>
         <div className="table">
           {/* <img src="mahjong-table.jpeg" alt="" /> */}
         </div>
       </div>
-      <button onClick={handleParentChange}>親流れ</button>
+      {/* <button onClick={handleParentChange}>親流れ</button>
       <button onClick={handleAgari}>和了</button>
-      <button onClick={handleTenpai}>聴牌</button>
+      <button onClick={handleTenpai}>聴牌</button> */}
       {showModal && (
         <div className="modal">
           <button className="close-button" onClick={handleCloseModal}>×</button>

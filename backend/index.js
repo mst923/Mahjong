@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const { User, sequelize } = require('./models');
 
 const app = express();
-// const cors = require('cors');
 const child_tsumo_scores = require('./child_tsumo_scores.json');
 const child_ron_scores = require('./child_ron_scores.json')
 const parent_tsumo_scores = require('./parent_tsumo_scores.json')
