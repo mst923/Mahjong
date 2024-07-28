@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Register from './pages/Register';
 import Play4 from './pages/Play4';
+import Play3 from './pages/Play3';
 import './App.css';
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
               <li>
                 <Link to="/play4">Play4</Link>
               </li>
+              <li>
+                <Link to="/play3">Play3</Link>
+              </li>
             </ul>
           </nav>
           <Routes>
@@ -32,6 +36,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/register" element={<Register/>}/>
             <Route path='/play4' element={<Play4/>}/>
+            <Route path='/play3' element={<Play3/>}/>
           </Routes>
         </header>
       </div>

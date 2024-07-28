@@ -1,0 +1,319 @@
+body {
+    margin:0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('./mahjong-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .play3-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      
+    }
+  
+    .kyoutaku-container {
+      margin-bottom: 20px;
+      font-size: 24px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+    
+    .play3-table {
+      display: grid;
+      grid-template-areas:
+        ". user1 ."
+      "user2   table   user3";
+      gap: 50px;
+      width: 150%;
+    height: 120%;
+    max-width: 800px; /* 最大幅を設定 */
+    max-height: 800px; /* 最大高さを設定 */
+    position: relative;
+    }
+  
+    .play3-table select {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  
+    .play3-table .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    /* .play4-table .controls button {
+      font-size: 20px;
+      margin: 10px;
+      padding: 5px 15px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    } */
+  
+    .play3-table .controls span {
+      font-size: 20px;
+      font-weight: bold; /* 点数表示を太字に */
+    }
+  
+    .play3-table .controls button:hover {
+      background-color: #45a049;
+    }
+    
+    .play3-table .controls .riichi {
+      background-color: #FF6347;
+    }
+    
+    .play3-table .controls .riichi:hover {
+      background-color: #FF4500;
+    }
+  
+  
+    .play3-table .kyoutaku-button {
+      font-size: 20px;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #FFA500;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    
+    .play3-table .kyoutaku-button:hover {
+      background-color: #FF8C00;
+    }
+    
+    /* .user1 {
+      grid-area: user1;
+    }
+    
+    .user2 {
+      grid-area: user2;
+    }
+    
+    .user3 {
+      grid-area: user3;
+    }
+    
+    .user4 {
+      grid-area: user4;
+    } */
+  
+    /* .user1, .user2, .user3, .user4 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    } */
+  
+    .user1 {
+      grid-area: user1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column; /* 子要素を縦に並べる */
+    }
+    
+    .user2 {
+      grid-area: user2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column; /* 子要素を縦に並べる */
+    }
+    
+    .user3 {
+      grid-area: user3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column; /* 子要素を縦に並べる */
+    }
+  
+    .user1 select, .user2 select, .user3 select{
+      font-size: 24px;
+      padding: 10px;
+      margin-bottom: 10px; /* セレクトボックスとボタン・点数の間に余白を追加 */
+    }
+  
+    .user1 .controls, .user2 .controls, .user3 .controls{
+      display: flex;
+      align-items: center;
+    }
+  
+    .user1 .controls button, .user2 .controls button, .user3 .controls button {
+      font-size: 16px;
+      padding: 5px 10px;
+      margin-right: 10px; /* ボタンと点数の間に余白を追加 */
+    }
+  
+    .user1 .controls .riichi, .user2 .controls .riichi, .user3 .controls .riichi{
+      background-color: red;
+      color: white;
+    }
+  
+    .user1 .controls .normal, .user2 .controls .normal, .user3 .controls .normal {
+      background-color: transparent;
+      color: white;
+    }
+  
+    .user1 .controls span, .user2 .controls span, .user3 .controls span {
+      font-size: 24px;
+    }
+  
+    .wind {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    
+  
+  
+    
+    .table {
+      grid-area: table;
+      position: absolute;
+      background-image: url('./mahjong-table.jpeg');
+      /* background-size: cover; containからcoverに変更 */
+      /* background-position: center;
+      background-repeat: no-repeat; */
+      top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 340px; /* 固定幅を設定 */
+    height: 340px; /* 固定高さを設定 */
+    }
+  
+    .table img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 画像の縦横比を維持しながら表示 */
+    }
+    
+    /* .table::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('./mahjong-table.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+    } */
+  
+  
+    .modal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    
+    .modal select, .modal button {
+      font-size: 24px;
+      margin: 10px;
+    }
+  
+    .modal .close-button {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  
+    .modal h2 {
+      margin-bottom: 20px;
+    }
+    
+    .modal label {
+      margin: 10px 0;
+    }
+  
+    .count-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .counter {
+      margin: 0 10px;
+    }
+    
+    button.increment, button.decrement {
+      font-size: 24px;
+      color: white;
+      background-color: #4CAF50;
+      border: none;
+      padding: 5px 10px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    
+    button.increment:hover, button.decrement:hover {
+      background-color: #45a049;
+    }
+    
+    button.increment:disabled, button.decrement:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+  
+    .button-container {
+      display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    }
+    
+    .button-container button {
+      font-size: 28px;
+      color: white;
+      background-color: #4CAF50;
+      border: none;
+      padding: 15px 30px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    
+    .button-container button:hover {
+      background-color: #45a049;
+    }
+    
+    .modal select, .modal button {
+      font-size: 24px;
+      margin: 10px;
+    }
+    
+    .modal .close-button {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
