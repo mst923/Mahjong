@@ -36,10 +36,10 @@ const Register = () => {
 
   return (
     <div>
-      <h1>Register</h1>
+      <h1>ユーザ登録</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
+          <label>ユーザネーム:</label>
           <input
             type="text"
             value={username}
@@ -48,7 +48,7 @@ const Register = () => {
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label>パスワード:</label>
           <input
             type="password"
             value={password}
@@ -56,7 +56,7 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">登録</button>
       </form>
     </div>
   );

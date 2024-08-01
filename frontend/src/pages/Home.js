@@ -3,8 +3,8 @@ import React from 'react';
 const Home = () => {
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the Home Page!</p>
+      <h1>麻雀計算アプリ:天峯</h1>
+      <p>点棒がない時でも手積み麻雀で遊べる！</p>
     </div>
   );
 };

@@ -5,6 +5,8 @@ import About from './pages/About';
 import Register from './pages/Register';
 import Play4 from './pages/Play4';
 import Play3 from './pages/Play3';
+import Statistics4  from './pages/Statistics4';
+import Statistics3 from './pages/Statistics3';
 import './App.css';
 
 function App() {
@@ -29,6 +31,12 @@ function App() {
               <li>
                 <Link to="/play3">Play3</Link>
               </li>
+              <li>
+                <Link to="/statistics4">Statistics4</Link>
+              </li>
+              <li>
+                <Link to="/statistics3">Statistics3</Link>
+              </li>
             </ul>
           </nav>
           <Routes>
@@ -37,6 +45,8 @@ function App() {
             <Route path="/register" element={<Register/>}/>
             <Route path='/play4' element={<Play4/>}/>
             <Route path='/play3' element={<Play3/>}/>
+            <Route path='/statistics4' element={<Statistics4/>}/>
+            <Route path='/statistics3' element={<Statistics3/>}/>
           </Routes>
         </header>
       </div>

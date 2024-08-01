@@ -20,11 +20,47 @@ const Play4 = () => {
   const [parentRonPoints, setParentRonPoints] = useState([]); // 親のロンの点数データ
   const [selectedPoint, setSelectedPoint] = useState(null); // 選択された点数
   const [isTenpaiModal, setIsTenpaiModal] = useState(false); // 聴牌モーダルの表示状態
+  const [roundCount, setRoundCount] = useState(0); //局数
+
+  // 各ユーザの記録データを管理する状態
+  const [userStats, setUserStats] = useState([]);
+  
 
   useEffect(() => {
     fetch('/api/users')
       .then(response => response.json())
-      .then(data => setUsers(data));
+      .then(data => {
+        setUsers(data)
+        //ユーザデータの取得
+        fetch('/api/statistics4')
+        .then(responce => responce.json())
+        .then(stats => {
+          const initialStats = data.map(user => {
+            const userStat = stats.find(stat => stat.userId === user.id);
+            return userStat ? userStat : {
+              userId: user.id,
+              totalMatches: 0,
+              totalRounds: 0,
+              agariCount: 0,
+              riichiCount: 0,
+              riichiAgariCount: 0,
+              totalAgariPoints: 0,
+              totalHojuCount: 0,
+              totalHojuPoints: 0,
+              tsumoAgariCount: 0,
+              topCount: 0,
+              secondCount: 0,
+              thirdCount: 0,
+              lastCount: 0,
+              hakoshitaCount: 0,
+              totalPoints: 0,
+        };
+      });
+      setUserStats(initialStats)
+    })
+    .catch(error => console.log('Error fetching statistics:', error));
+  })
+  .catch(error => console.log('Error fetching users:', error))
 
     fetch('/api/child_tsumo_scores')
     .then(response => response.json())
@@ -38,11 +74,11 @@ const Play4 = () => {
     .then(response => response.json())
     .then(data => setParentTsumoPoints(data.points));
 
-    console.log(parentTsumoPoints)
-
     fetch('/api/parent_ron_scores')
     .then(response => response.json())
     .then(data => setParentRonPoints(data.points));
+
+    
   }, []);
 
   //ユーザセレクトの時のハンドラ
@@ -62,12 +98,22 @@ const Play4 = () => {
       newScores[index] += 1000;
       newKyoutaku -= 1000;
       newRiichiStates[index] = false;
+
+      //立直操作を取り消して、同時に立直回数も減らす
+      const newUserStats = [...userStats];
+      newUserStats[index].riichiCount -= 1;
+      setUserStats(newUserStats);
     } else {
       // リーチしていない場合
       if (newScores[index] >= 1000) {
         newScores[index] -= 1000;
         newKyoutaku += 1000;
         newRiichiStates[index] = true;
+
+        // リーチ回数を記録
+        const newUserStats = [...userStats];
+        newUserStats[index].riichiCount += 1;
+        setUserStats(newUserStats);
       }
     }
 
@@ -76,7 +122,8 @@ const Play4 = () => {
     setRiichiStates(newRiichiStates);
   };
 
-  //　流局の扱い
+  //　誤操作してしまった時などの親を変える用のボタン。
+  // 基本親を交代するだけであとは何もしない
   const handleParentChange = () => {
     const newWinds = [...winds];
     newWinds.unshift(newWinds.pop()); // 風牌を反時計回りに移動
@@ -96,14 +143,34 @@ const Play4 = () => {
   };
 
   //モーダルの内容を計算する
+  //平均打点や平均放銃を計算するときは、基本的に素点のみカウント
   const handleModalSubmit = () => {
     const newScores = [...scores];
+    const newUserStats = [...userStats];
+
+    //和了したユーザのカウントを1増やす
+    newUserStats[agariUser].agariCount += 1;
+    //和了したユーザが立直していた場合、立直和了カウントを1増やす
+    if (riichiStates[agariUser]){
+      newUserStats[agariUser].riichiAgariCount += 1;
+    }
 
     if (agariType === 'ロン') {
       const ronPoint = selectedPoint; // ロンは単一値
       newScores[agariUser] += (ronPoint + 300 * honba);
       newScores[ronUser] -= (ronPoint + 300 * honba);
+
+      //ロンしたユーザの記録を更新
+      newUserStats[agariUser].totalAgariPoints += ronPoint
+
+      // 放銃したユーザの記録を更新
+      newUserStats[ronUser].totalHojuCount += 1;
+      newUserStats[ronUser].totalHojuPoints += ronPoint;
     } else if (agariType === 'ツモ') {
+
+      //ツモ和了の記録を更新
+      newUserStats[agariUser].tsumoAgariCount += 1
+
       //親のツモ
       if (winds[agariUser] === '東') {
         newScores[agariUser] += (selectedPoint * 3 + 300 * honba);
@@ -112,6 +179,8 @@ const Play4 = () => {
             newScores[i] -= (selectedPoint + 100*honba);
           }
         }
+        //和了したユーザの記録を更新
+        newUserStats[agariUser].totalAgariPoints += 3 * selectedPoint
       } else {
         //子のツモ
         const [nonEastPoint, eastPoint] = selectedPoint;
@@ -125,6 +194,8 @@ const Play4 = () => {
             }
           }
         }
+        //和了したユーザの記録を更新
+        newUserStats[agariUser].totalAgariPoints += nonEastPoint * 2 + eastPoint
       }
     }
     //和了が親でなければ、親を回す、本場を0にする
@@ -146,6 +217,8 @@ const Play4 = () => {
     setScores(newScores);
     //モーダルを閉じる
     setShowModal(false);
+    //局数を1増やす
+    setRoundCount(roundCount + 1);
   };
   //点数のセレクタ
   const handlePointSelect = (event) => {
@@ -188,6 +261,7 @@ const Play4 = () => {
     setShowModal(true);
   };
 
+  //立直してるプレーヤーのリーチカウントを繰り上げ
   const handleTenpaiSubmit = () => {
     const newScores = [...scores];
     const newRiichiStates = [...riichiStates];
@@ -235,6 +309,7 @@ const Play4 = () => {
     setShowModal(false);
     setIsTenpaiModal(false);
     incrementHonba()
+    setRoundCount(roundCount + 1); //局数が増える
   };
 
   const handleTenpaiChange = (index) => {
@@ -252,6 +327,64 @@ const Play4 = () => {
     }
   };
 
+  //ゲーム終了時に呼び出される
+  const handleEndGame = () => {
+    if (window.confirm('ゲームを終了しますか？')) {
+
+      
+      // 局数の更新と試合数の更新
+      const updatedStats = userStats.map(stat => ({
+        ...stat,
+        totalRounds: stat.totalRounds + roundCount,
+        totalMatches: stat.totalMatches + 1,
+      }));
+
+      // ユーザのスコアを基に順位を決定
+      //一旦固定でMリーグルール
+      //30000点返し、10-30
+      // ユーザのスコアを一時的に格納し、順位を決定
+      const scoresWithIndex = scores.map((score, index) => ({ score, index }))
+      .sort((a, b) => b.score - a.score);
+
+      // 順位に応じた更新を実行
+      scoresWithIndex.forEach((item, rank) => {
+        const stat = updatedStats[item.index];
+        if (rank === 0) {
+          stat.topCount += 1;
+          stat.totalPoints += (item.score - 30000) / 1000 + 50;
+        } else if (rank === 1) {
+          stat.secondCount += 1;
+          stat.totalPoints += (item.score - 30000) / 1000 + 10;
+        } else if (rank === 2) {
+          stat.thirdCount += 1;
+          stat.totalPoints += (item.score - 30000) / 1000 - 10;
+        } else if (rank === 3) {
+          stat.lastCount += 1;
+          stat.totalPoints += (item.score - 30000) / 1000 - 30;
+        }
+      });
+
+      // 各ユーザのポイント計算と表示
+      console.log("ユーザ統計データ:", updatedStats);
+
+      // サーバーに記録データを送信
+      fetch('/api/statistics4', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedStats)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('データベースに保存されました:', data);
+      })
+      .catch(error => {
+        console.error('データベースへの保存中にエラーが発生しました:', error);
+      });
+    }
+  };
+
   return (
     <div className="play4-container">
       <h1>4人麻雀</h1>
@@ -259,6 +392,7 @@ const Play4 = () => {
       <button onClick={handleParentChange}>親流れ</button>
       <button onClick={handleAgari}>和了</button>
       <button onClick={handleTenpai}>聴牌</button>
+      <button onClick={handleEndGame}>終了</button>
       </div>
       
       <div className="kyoutaku-container">
